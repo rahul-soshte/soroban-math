@@ -2,6 +2,12 @@
 name = "soroban-math"
 version = "0.1.0"
 edition = "2021"
+description = "Fixed-Point Math Library for soroban smart contracts with advanced math and high precision"
+license = "Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/rahul-soshte/soroban-math"
+keywords = ["stellar", "soroban", "rust", "math", "arithmetic"]
+authors = ["Rahul Soshte <rahul.soshte47@gmail.com>"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
