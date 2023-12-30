@@ -4,8 +4,6 @@
 ![Crates.io](https://img.shields.io/crates/l/soroban-math)
 ![Crates.io](https://img.shields.io/crates/d/soroban-math)
 
-<img src="img/logo-color.png" alt="drawing" width="300"/>
-
 A high-precision fixed-point math library for Soroban smart contracts on the Stellar blockchain.
 
 **This project aims to empower Soroban developers with precise mathematical operations and advanced functions while minimizing precision loss. It is currently under development and subject to enhancements and optimizations.**
