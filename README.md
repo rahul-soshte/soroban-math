@@ -1,5 +1,9 @@
 # Soroban-Math
 
+![Crates.io](https://img.shields.io/crates/v/soroban-math)
+![Crates.io](https://img.shields.io/crates/l/soroban-math)
+![Crates.io](https://img.shields.io/crates/d/soroban-math)
+
 <img src="img/logo-color.png" alt="drawing" width="300"/>
 
 A high-precision fixed-point math library for Soroban smart contracts on the Stellar blockchain.
