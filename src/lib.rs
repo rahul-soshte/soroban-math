@@ -1,3 +1,5 @@
+pub mod add;
+
 pub struct SoroNum<T> {
     value: T,
 }
@@ -8,7 +10,6 @@ impl<T> SoroNum<T> {
         Self { value }
     }
     
-    // Example basic method (you'll replace this with actual arithmetic operations)
     pub fn value(&self) -> &T {
         &self.value
     }
@@ -16,25 +17,6 @@ impl<T> SoroNum<T> {
 
 pub trait CoreArith {
     fn add(self, other: Self) -> Self;
-    fn sub(self, other: Self) -> Self;
-    fn mul(self, other: Self) -> Self;
-    fn div(self, other: Self) -> Self;
+    //TODO: Add function signature for mul, div, sub in the CoreArith trait 
 }
 
-impl CoreArith for SoroNum<i32> {
-    fn add(self, other: Self) -> Self {
-        SoroNum { value: self.value + other.value }
-    }
-
-    fn sub(self, other: Self) -> Self {
-        SoroNum { value: self.value - other.value }
-    }
-
-    fn mul(self, other: Self) -> Self {
-        SoroNum { value: self.value * other.value }
-    }
-
-    fn div(self, other: Self) -> Self {
-        SoroNum { value: self.value / other.value }
-    }
-}
