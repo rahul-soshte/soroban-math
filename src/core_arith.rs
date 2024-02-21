@@ -6,20 +6,28 @@ impl CoreArith for SoroNum<i32> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
     }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value } 
+    }
 }
 
-//u32
+// u32
 impl CoreArith for SoroNum<u32> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
     }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value }
+    }
 }
-
 
 // u64
 impl CoreArith for SoroNum<u64> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
+    }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value } 
     }
 }
 
@@ -28,12 +36,18 @@ impl CoreArith for SoroNum<i64> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
     }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value } 
+    }
 }
 
 // i128
 impl CoreArith for SoroNum<i128> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
+    }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value }
     }
 }
 
@@ -42,6 +56,9 @@ impl CoreArith for SoroNum<u128> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value + other.value }
     }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value - other.value } 
+    }
 }
 
 // U256
@@ -49,11 +66,17 @@ impl CoreArith for SoroNum<U256> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value.add(&other.value) }
     }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value.sub(&other.value) } 
+    }
 }
 
 // I256
 impl CoreArith for SoroNum<I256> {
     fn add(self, other: Self) -> Self {
         SoroNum { value: self.value.add(&other.value) }
+    }
+    fn sub(self, other: Self) -> Self {
+        SoroNum { value: self.value.sub(&other.value) } 
     }
 }

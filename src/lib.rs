@@ -1,4 +1,5 @@
-pub mod add;
+pub mod core_arith;
+
 
 pub struct SoroNum<T> {
     value: T,
@@ -17,6 +18,7 @@ impl<T> SoroNum<T> {
 
 pub trait CoreArith {
     fn add(self, other: Self) -> Self;
-    //TODO: Add function signature for mul, div, sub in the CoreArith trait 
+    fn sub(self, other: Self) -> Self; 
+    //TODO: Add function signature for mul, div in the CoreArith trait 
 }
 
