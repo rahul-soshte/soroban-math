@@ -4,10 +4,17 @@ use soroban_sdk::{U256, I256};
 // i32
 impl CoreArith for SoroNum<i32> {
     fn add(self, other: Self) -> Self {
-        SoroNum { value: self.value + other.value }
+        SoroNum { value: &self.value + &other.value }
     }
     fn sub(self, other: Self) -> Self {
-        SoroNum { value: self.value - other.value } 
+        SoroNum { value: &self.value - &other.value } 
+    }
+
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: &self.value * &other.value }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: &self.value / &other.value }
     }
 }
 
@@ -19,6 +26,15 @@ impl CoreArith for SoroNum<u32> {
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value - other.value }
     }
+
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value * other.value }
+    }
+
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value / other.value }
+    }
+
 }
 
 // u64
@@ -28,6 +44,13 @@ impl CoreArith for SoroNum<u64> {
     }
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value - other.value } 
+    }
+
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value * other.value }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value / other.value }
     }
 }
 
@@ -39,6 +62,12 @@ impl CoreArith for SoroNum<i64> {
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value - other.value } 
     }
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value * other.value }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value / other.value }
+    }
 }
 
 // i128
@@ -48,6 +77,12 @@ impl CoreArith for SoroNum<i128> {
     }
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value - other.value }
+    }
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value * other.value }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value / other.value }
     }
 }
 
@@ -59,6 +94,12 @@ impl CoreArith for SoroNum<u128> {
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value - other.value } 
     }
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value * other.value }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value / other.value }
+    }
 }
 
 // U256
@@ -69,6 +110,12 @@ impl CoreArith for SoroNum<U256> {
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value.sub(&other.value) } 
     }
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value.mul(&other.value) }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value.div(&other.value) }
+    }
 }
 
 // I256
@@ -78,5 +125,36 @@ impl CoreArith for SoroNum<I256> {
     }
     fn sub(self, other: Self) -> Self {
         SoroNum { value: self.value.sub(&other.value) } 
+    }
+    fn mul(self, other: Self) -> Self {
+        SoroNum { value: self.value.mul(&other.value) }
+    }
+    fn div(self, other: Self) -> Self {
+        SoroNum { value: self.value.div(&other.value) }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_core_arith_operations_soronum_u32() {
+        let num1 = SoroNum { value: 10 };
+        let num2 = SoroNum { value: 5 };
+        
+        // Test addition
+        assert_eq!(num1.clone().add(num2.clone()).value, 15, "Addition did not work as expected");
+        
+        // Test subtraction
+        assert_eq!(num1.clone().sub(SoroNum { value: 3 }).value, 7, "Subtraction did not work as expected");
+        
+        // Test multiplication
+        assert_eq!(num1.clone().mul(SoroNum { value: 2 }).value, 20, "Multiplication did not work as expected");
+        
+        // Test division
+        assert_eq!(num1.clone().div(SoroNum { value: 2 }).value, 5, "Division did not work as expected");
+        
+        
     }
 }
