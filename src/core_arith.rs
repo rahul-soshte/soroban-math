@@ -139,22 +139,26 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_core_arith_operations_soronum_u32() {
-        let num1 = SoroNum { value: 10 };
-        let num2 = SoroNum { value: 5 };
-        
-        // Test addition
+    fn test_core_arith_operations_soronum_u32_i32() {
+        let num1 = SoroNum { value: 10u32 };
+        let num2 = SoroNum { value: 5u32 };
+       
         assert_eq!(num1.clone().add(num2.clone()).value, 15, "Addition did not work as expected");
-        
-        // Test subtraction
         assert_eq!(num1.clone().sub(SoroNum { value: 3 }).value, 7, "Subtraction did not work as expected");
-        
-        // Test multiplication
         assert_eq!(num1.clone().mul(SoroNum { value: 2 }).value, 20, "Multiplication did not work as expected");
-        
-        // Test division
         assert_eq!(num1.clone().div(SoroNum { value: 2 }).value, 5, "Division did not work as expected");
         
+        let num1 = SoroNum { value: 12_i32 };
+        let num2 = SoroNum { value: 5_i32 };
+
+        assert_eq!(num1.clone().add(num2.clone()).value, 17, "Addition did not work as expected");
+        assert_eq!(num1.clone().sub(SoroNum { value: 3 }).value, 9, "Subtraction did not work as expected");
+        assert_eq!(num1.clone().mul(SoroNum { value: 2 }).value, 24, "Multiplication did not work as expected");
+        assert_eq!(num1.clone().div(SoroNum { value: 2 }).value, 6, "Division did not work as expected");
+
         
     }
+
+
+
 }
