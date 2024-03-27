@@ -1,7 +1,7 @@
 workspace = { members = ["example"] }
 [package]
 name = "soroban-math"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 description = "Fixed-Point Math Library for soroban smart contracts with advanced math and high precision"
 license = "Apache-2.0"
