@@ -1,7 +1,7 @@
 #![no_std]
 use core::ops::Add;
 
-use soroban_math::{SoroNum, CoreArith};
+use soroban_math::{CoreArith, SoroNum};
 use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
@@ -18,4 +18,3 @@ impl SorobanMathExample {
 }
 
 mod test;
-
