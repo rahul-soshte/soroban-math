@@ -9,10 +9,10 @@ pub struct SorobanMathExample;
 
 #[contractimpl]
 impl SorobanMathExample {
-    pub fn simple_u32_add(env: Env, a: u32, b: u32) -> u32 {
+    pub fn simple_u32_add(a: u32, b: u32) -> u32 {
         let x = SoroNum::new(a);
         let y = SoroNum::new(b);
-        let m = x.clone().add(y);
+        let m = x.clone().add(y).unwrap();
         *m.value()
     }
 }
