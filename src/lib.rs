@@ -1,12 +1,12 @@
 //! Core Math Functions
 pub mod error;
-
+pub mod pow;
 use crate::error::ArithmeticError;
 use soroban_sdk::{Env, I256, U256};
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default)]
 pub struct SoroNum<T> {
-    value: T,
+    pub value: T,
 }
 
 impl<T> SoroNum<T> {
