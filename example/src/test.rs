@@ -19,4 +19,8 @@ fn test() {
     let pow_i128_u32 = client.pow_i128_base_u32_exponent(&5_i128, &2_u32);
     assert_eq!(pow_i128_u32, 25_i128);
 
+    let log2_u128 = client.log_2_i128(&1024);
+    assert_eq!(log2_u128, 10_u32);
+
+    //TODO: Case where the extra decimal part is cut off.
 }

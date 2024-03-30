@@ -1,7 +1,7 @@
 #![no_std]
 use core::ops::Add;
 
-use soroban_math::{CoreArith, SoroNum, pow::Power};
+use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm};
 use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
@@ -26,6 +26,12 @@ impl SorobanMathExample {
         let x = SoroNum::new(a);
         let m = x.pow(b).unwrap();
         *m.value()
+    }
+
+    pub fn log_2_i128(a: i128) -> u32 {
+        let num = SoroNum { value: a };
+        num.log2().unwrap()
+   
     }
 }
 

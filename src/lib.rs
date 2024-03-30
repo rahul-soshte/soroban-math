@@ -1,6 +1,7 @@
 //! Core Math Functions
 pub mod error;
 pub mod pow;
+pub mod log;
 use crate::error::ArithmeticError;
 use soroban_sdk::{Env, I256, U256};
 
