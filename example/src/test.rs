@@ -22,5 +22,9 @@ fn test() {
     let log2_u128 = client.log_2_i128(&1024);
     assert_eq!(log2_u128, 10_u32);
 
-    //TODO: Case where the extra decimal part is cut off.
+    //TODO: Case where the extra decimal part is cut off. base Precision stuff.
+    let root = client.root(&U256::from_u32(&env, 16_u32));
+    assert_eq!(root, U256::from_u32(&env, 4_u32));
+
+
 }

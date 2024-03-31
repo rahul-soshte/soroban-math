@@ -1,9 +1,12 @@
 //! Core Math Functions
+#![cfg_attr(not(feature = "std"), no_std)]
+
+use crate::error::ArithmeticError;
+use soroban_sdk::{Env, I256, U256};
+pub mod root;
 pub mod error;
 pub mod pow;
 pub mod log;
-use crate::error::ArithmeticError;
-use soroban_sdk::{Env, I256, U256};
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SoroNum<T> {

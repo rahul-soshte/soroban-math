@@ -2,7 +2,7 @@ clean:
 	cargo clean
 
 build:
-	cargo build --release
+	soroban contract build
 	
 test:
 	cargo test

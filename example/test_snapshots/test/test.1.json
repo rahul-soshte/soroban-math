@@ -7,6 +7,7 @@
     [],
     [],
     [],
+    [],
     []
   ],
   "ledger": {
@@ -301,6 +302,65 @@
             ],
             "data": {
               "u32": 10
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": null,
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_call"
+              },
+              {
+                "bytes": "0000000000000000000000000000000000000000000000000000000000000001"
+              },
+              {
+                "symbol": "root"
+              }
+            ],
+            "data": {
+              "u256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 16
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_return"
+              },
+              {
+                "symbol": "root"
+              }
+            ],
+            "data": {
+              "u256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 4
+              }
             }
           }
         }

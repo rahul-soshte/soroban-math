@@ -1,8 +1,8 @@
 #![no_std]
 use core::ops::Add;
 
-use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm};
-use soroban_sdk::{contract, contractimpl, Env};
+use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm, root::Sqrt};
+use soroban_sdk::{contract, contractimpl, U256, Env};
 
 #[contract]
 pub struct SorobanMathExample;
@@ -33,6 +33,10 @@ impl SorobanMathExample {
         num.log2().unwrap()
    
     }
-}
 
+    pub fn root(e: Env, a: U256) -> U256 {
+        let num1 = SoroNum { value: a };
+        num1.sqrt(&e).value().clone()
+    }
+}
 mod test;
