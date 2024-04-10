@@ -26,5 +26,7 @@ fn test() {
     let root = client.root(&U256::from_u32(&env, 16_u32));
     assert_eq!(root, U256::from_u32(&env, 4_u32));
 
+    let log2_u128 = client.log_2_u256(&U256::from_u128(&env, 1024));
+    assert_eq!(log2_u128, 10_u32);
 
 }

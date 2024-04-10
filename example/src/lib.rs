@@ -38,5 +38,10 @@ impl SorobanMathExample {
         let num1 = SoroNum { value: a };
         num1.sqrt(&e).value().clone()
     }
+
+    pub fn log_2_u256(a: U256) -> u32 {
+        let num = SoroNum { value: a };
+        num.log2().unwrap()
+    }
 }
 mod test;
