@@ -28,5 +28,12 @@ fn test() {
 
     let log2_u128 = client.log_2_u256(&U256::from_u128(&env, 1024));
     assert_eq!(log2_u128, 10_u32);
+    
+    //TODO: Do proper scaled division for improvement in output
+    let sin_u256 = client.sin_u256(&U256::from_u128(&env, 60));
+    assert_eq!(sin_u256, U256::from_u128(&env, 866021));
+
+    let cos_u256 = client.cos_u256(&U256::from_u128(&env, 60));
+    assert_eq!(cos_u256, U256::from_u128(&env, 499966));
 
 }

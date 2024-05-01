@@ -1,7 +1,7 @@
 #![no_std]
 use core::ops::Add;
 
-use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm, root::Sqrt};
+use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm, root::Sqrt, trig::Trigonometry};
 use soroban_sdk::{contract, contractimpl, U256, Env};
 
 #[contract]
@@ -42,6 +42,17 @@ impl SorobanMathExample {
     pub fn log_2_u256(a: U256) -> u32 {
         let num = SoroNum { value: a };
         num.log2().unwrap()
+    }
+
+    
+    pub fn sin_u256(e: Env, a: U256) -> U256 {
+        let num = SoroNum { value: a };
+        num.sin(&e).value().clone()
+    }
+
+    pub fn cos_u256(e: Env, a: U256) -> U256 {
+        let num = SoroNum { value: a };
+        num.cos(&e).value().clone()
     }
 }
 mod test;

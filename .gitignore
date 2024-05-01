@@ -1,3 +1,4 @@
 /target
 /Cargo.lock
 test_snapshots
+example/test_snapshots
