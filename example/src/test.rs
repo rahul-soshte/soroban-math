@@ -2,7 +2,7 @@
 
 
 use super::*;
-use soroban_sdk::Env;
+use soroban_sdk::{Env, U256, I256};
 
 #[test]
 fn test() {
@@ -36,4 +36,9 @@ fn test() {
     let cos_u256 = client.cos_u256(&U256::from_u128(&env, 60));
     assert_eq!(cos_u256, U256::from_u128(&env, 499966));
 
+    let sin_i256 = client.sin_i256(&I256::from_i128(&env, 60));
+    assert_eq!(sin_i256, I256::from_i128(&env, 866021));
+
+    let cos_i256 = client.cos_i256(&I256::from_i128(&env, 60));
+    assert_eq!(cos_i256, I256::from_i128(&env, 499966));
 }

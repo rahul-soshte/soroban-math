@@ -2,7 +2,7 @@
 use core::ops::Add;
 
 use soroban_math::{CoreArith, SoroNum, pow::Power, log::Logarithm, root::Sqrt, trig::Trigonometry};
-use soroban_sdk::{contract, contractimpl, U256, Env};
+use soroban_sdk::{contract, contractimpl, U256, I256, Env};
 
 #[contract]
 pub struct SorobanMathExample;
@@ -54,5 +54,15 @@ impl SorobanMathExample {
         let num = SoroNum { value: a };
         num.cos(&e).value().clone()
     }
+
+    pub fn sin_i256(e: Env, a: I256) -> I256 {
+        let num = SoroNum { value: a };
+        num.sin(&e).value().clone()
+    }
+    pub fn cos_i256(e: Env, a: I256) -> I256 {
+        let num = SoroNum { value: a };
+        num.cos(&e).value().clone()
+    }
+    
 }
 mod test;

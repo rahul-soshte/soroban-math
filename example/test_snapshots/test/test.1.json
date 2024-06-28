@@ -11,6 +11,8 @@
     [],
     [],
     [],
+    [],
+    [],
     []
   ],
   "ledger": {
@@ -531,6 +533,124 @@
             ],
             "data": {
               "u256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 499966
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": null,
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_call"
+              },
+              {
+                "bytes": "0000000000000000000000000000000000000000000000000000000000000001"
+              },
+              {
+                "symbol": "sin_i256"
+              }
+            ],
+            "data": {
+              "i256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 60
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_return"
+              },
+              {
+                "symbol": "sin_i256"
+              }
+            ],
+            "data": {
+              "i256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 866021
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": null,
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_call"
+              },
+              {
+                "bytes": "0000000000000000000000000000000000000000000000000000000000000001"
+              },
+              {
+                "symbol": "cos_i256"
+              }
+            ],
+            "data": {
+              "i256": {
+                "hi_hi": 0,
+                "hi_lo": 0,
+                "lo_hi": 0,
+                "lo_lo": 60
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    },
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000001",
+        "type_": "diagnostic",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "fn_return"
+              },
+              {
+                "symbol": "cos_i256"
+              }
+            ],
+            "data": {
+              "i256": {
                 "hi_hi": 0,
                 "hi_lo": 0,
                 "lo_hi": 0,
