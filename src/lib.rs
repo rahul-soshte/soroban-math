@@ -2,19 +2,19 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use crate::error::ArithmeticError;
-use soroban_sdk::{Env, I256, U256};
-pub mod root;
+use soroban_sdk::{Env, I256};
 pub mod error;
-pub mod pow;
-pub mod log;
-pub mod trig;
+// pub mod pow;
+// pub mod log;
+// pub mod trig;
+// pub mod root;
 
 #[derive(Clone, Copy, Debug, Default)]
-pub struct SoroNum<T> {
+pub struct SoroNum<T, const SCALE: u32> {
     pub value: T,
 }
 
-impl<T> SoroNum<T> {
+impl<T, const SCALE: u32> SoroNum<T, SCALE> {
     pub fn new(value: T) -> Self {
         Self { value }
     }
@@ -22,278 +22,121 @@ impl<T> SoroNum<T> {
     pub fn value(&self) -> &T {
         &self.value
     }
+
+    pub fn scale() -> u32 {
+        SCALE
+    }
 }
 
 pub trait CoreArith {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError>
-    where
-        Self: Sized;
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError>
-    where
-        Self: Sized;
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError>
-    where
-        Self: Sized;
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError>
-    where
-        Self: Sized;
+    fn add<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<Self::Inner, SCALE_IN>,
+        e: &Env
+    ) -> Result<SoroNum<Self::Inner, SCALE_OUT>, ArithmeticError>;
+
+    fn sub<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<Self::Inner, SCALE_IN>,
+        e: &Env
+    ) -> Result<SoroNum<Self::Inner, SCALE_OUT>, ArithmeticError>;
+
+    fn mul<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<Self::Inner, SCALE_IN>,
+        e: &Env
+    ) -> Result<SoroNum<Self::Inner, SCALE_OUT>, ArithmeticError>;
+
+    fn div<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<Self::Inner, SCALE_IN>,
+        e: &Env
+
+    ) -> Result<SoroNum<Self::Inner, SCALE_OUT>, ArithmeticError>;
+
+    type Inner;
 }
 
-impl CoreArith for SoroNum<i32> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
+
+impl<const SCALE: u32> CoreArith for SoroNum<i128, SCALE> {
+    type Inner = i128;
+
+    fn add<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<i128, SCALE_IN>,
+        env: &Env
+    ) -> Result<SoroNum<i128, SCALE_OUT>, ArithmeticError> {
+        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE));
+        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE_IN));
+        
+        let result = self_scaled.add(&other_scaled);
+        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+
+        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Err(ArithmeticError::Overflow)
+        } else {
+            Ok(SoroNum { value: scaled_result.to_i128().unwrap() })
+        }
     }
 
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
+    fn sub<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<i128, SCALE_IN>,
+        env: &Env
+    ) -> Result<SoroNum<i128, SCALE_OUT>, ArithmeticError> {
+        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE));
+        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE_IN));
+        
+        let result = self_scaled.sub(&other_scaled);
+        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+
+        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Err(ArithmeticError::Underflow)
+        } else {
+            Ok(SoroNum { value: scaled_result.to_i128().unwrap() })
+        }
     }
 
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
+    fn mul<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<i128, SCALE_IN>,
+        env: &Env
+    ) -> Result<SoroNum<i128, SCALE_OUT>, ArithmeticError> {
+        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE));
+        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE_IN));
+        
+        let result = self_scaled.mul(&other_scaled)
+            .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+
+        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+
+        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Err(ArithmeticError::Overflow)
+        } else {
+            Ok(SoroNum { value: scaled_result.to_i128().unwrap() })
+        }
     }
 
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
+    fn div<const SCALE_IN: u32, const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        other: &SoroNum<i128, SCALE_IN>,
+        env: &Env
+    ) -> Result<SoroNum<i128, SCALE_OUT>, ArithmeticError> {
         if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
+            return Err(ArithmeticError::DivisionByZero);
         }
-    }
-}
 
-impl CoreArith for SoroNum<u32> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
+        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE * 2 - SCALE));
+        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - SCALE_IN));
+        
+        let result = self_scaled.div(&other_scaled);
 
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
-    }
+        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
+        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Err(ArithmeticError::Overflow)
         } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
-        }
-    }
-}
-
-impl CoreArith for SoroNum<u64> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
-    }
-
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
-        }
-    }
-}
-
-impl CoreArith for SoroNum<i64> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
-    }
-
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
-        }
-    }
-}
-
-impl CoreArith for SoroNum<i128> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
-    }
-
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
-        }
-    }
-}
-
-// u128
-impl CoreArith for SoroNum<u128> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_add(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_sub(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Underflow)
-    }
-
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        self.value
-            .checked_mul(other.value)
-            .map(|value| SoroNum { value })
-            .ok_or(ArithmeticError::Overflow)
-    }
-
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == 0 {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            self.value
-                .checked_div(other.value)
-                .map(|value| SoroNum { value })
-                .ok_or(ArithmeticError::DivisionByZero)
-        }
-    }
-}
-
-impl CoreArith for SoroNum<U256> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.add(&other.value),
-        })
-    }
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.sub(&other.value),
-        })
-    }
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.mul(&other.value),
-        })
-    }
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == U256::from_u32(env, 0) {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            Ok(SoroNum {
-                value: self.value.div(&other.value),
-            })
-        }
-    }
-}
-
-impl CoreArith for SoroNum<I256> {
-    fn add(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.add(&other.value),
-        })
-    }
-    fn sub(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.sub(&other.value),
-        })
-    }
-    fn mul(self, other: Self) -> Result<Self, ArithmeticError> {
-        Ok(SoroNum {
-            value: self.value.mul(&other.value),
-        })
-    }
-    fn div(self, other: Self, env: &Env) -> Result<Self, ArithmeticError> {
-        if other.value == I256::from_i32(&env, 0) {
-            Err(ArithmeticError::DivisionByZero)
-        } else {
-            Ok(SoroNum {
-                value: self.value.div(&other.value),
-            })
+            Ok(SoroNum { value: scaled_result.to_i128().unwrap() })
         }
     }
 }
