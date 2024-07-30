@@ -1,8 +1,6 @@
 #![no_std]
-use core::ops::Add;
-
 use soroban_math::{CoreArith, SoroNum};
-use soroban_sdk::{contract, contractimpl, U256, I256, Env};
+use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
 pub struct SorobanMathExample;
@@ -11,9 +9,9 @@ pub struct SorobanMathExample;
 impl SorobanMathExample {
 
     pub fn test_i128_add(e: &Env) -> i128 {
-        let a = SoroNum::<i128, 6>::new(1_234_567);  // 1.234567
-        let b = SoroNum::<i128, 4>::new(23_4567);    // 23.4567
-        let m: SoroNum<i128, 8> = a.add::<4, 20, 8>(&b, e).unwrap();
+        let a = SoroNum::<i128>::new(1_234_567, 6);  // 1.234567
+        let b = SoroNum::<i128>::new(23_4567, 4);    // 23.4567
+        let m: SoroNum<i128> = a.add::<20, 8>(&b, e).unwrap();
         *m.value()
     }
 
