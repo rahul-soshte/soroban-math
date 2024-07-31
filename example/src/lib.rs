@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_math::{CoreArith, SoroNum};
+use soroban_math::{CoreArith, SoroNum, pow::Power};
 use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
@@ -13,6 +13,12 @@ impl SorobanMathExample {
         let b = SoroNum::<i128>::new(23_4567, 4);    // 23.4567
         let m: SoroNum<i128> = a.add::<20, 8>(&b, e).unwrap();
         *m.value()
+    }
+
+    pub fn test_i128_pow(e: &Env) {
+        let base = SoroNum::new(2_i128, 0);  // scale 0 for integers
+        let result = base.pow::<10, 0>(3, &e).unwrap();
+        assert_eq!(result.value, 8);
     }
 
     // pub fn simple_u32_add(a: u32, b: u32) -> u32 {

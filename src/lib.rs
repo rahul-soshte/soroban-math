@@ -4,8 +4,8 @@
 use crate::error::ArithmeticError;
 use soroban_sdk::{Env, I256};
 pub mod error;
-// pub mod pow;
-// pub mod log;
+pub mod pow;
+pub mod log;
 // pub mod trig;
 // pub mod root;
 
