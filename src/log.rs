@@ -16,6 +16,7 @@ pub trait Logarithm {
 pub trait I256Extensions {
     fn leading_zeros(&self) -> u32;
 }
+
 impl I256Extensions for I256 {
     fn leading_zeros(&self) -> u32 {
         let bytes: Bytes = self.to_be_bytes();
@@ -44,9 +45,17 @@ impl Logarithm for SoroNum<i128> {
             return Err(ArithmeticError::InvalidInput);
         }
 
-        let scaled_value = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
-        let log2 = I256::from_i128(env, 255 - scaled_value.leading_zeros() as i128);
-        let scaled_result = log2.mul(&I256::from_i128(env, 10).pow(SCALE_OUT));
+        let mut value = I256::from_i128(env, self.value);
+        let mut log2_result = I256::from_i128(env, 0);
+
+        // Iterate to calculate log2
+        while value > I256::from_i128(env, 1) {
+            value = value.div(&I256::from_i128(env, 2));
+            log2_result = log2_result.add(&I256::from_i128(env, 1));
+        }
+
+        // Scale result
+        let scaled_result = log2_result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT));
 
         if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Overflow)
@@ -63,17 +72,18 @@ impl Logarithm for SoroNum<i128> {
             return Err(ArithmeticError::InvalidInput);
         }
 
-        let scaled_value = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
-        let mut count = I256::from_i128(env, 0);
-        let mut num = scaled_value;
+        let mut value = I256::from_i128(env, self.value);
+        let mut log10_result = I256::from_i128(env, 0);
         let ten = I256::from_i128(env, 10);
-        
-        while num >= ten.pow(CALC_SCALE) {
-            num = num.div(&ten);
-            count = count.add(&I256::from_i128(env, 1));
+
+        // Iterate to calculate log10
+        while value >= ten {
+            value = value.div(&ten);
+            log10_result = log10_result.add(&I256::from_i128(env, 1));
         }
 
-        let scaled_result = count.mul(&I256::from_i128(env, 10).pow(SCALE_OUT));
+        // Scale result
+        let scaled_result = log10_result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT));
 
         if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Overflow)
@@ -82,4 +92,3 @@ impl Logarithm for SoroNum<i128> {
         }
     }
 }
-

@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_math::{CoreArith, SoroNum, pow::Power};
+use soroban_math::{log::Logarithm, pow::Power, CoreArith, SoroNum};
 use soroban_sdk::{contract, contractimpl, Env};
 
 #[contract]
@@ -21,6 +21,26 @@ impl SorobanMathExample {
         assert_eq!(result.value, 8);
     }
 
+    
+    pub fn test_log_2_i128(e: &Env) -> i128 {
+        const CALC_SCALE: u32 = 18; // This is an assumption, adjust if different
+        const SCALE_OUT: u32 = 0; 
+        let value = SoroNum { value: 1024_i128, scale: 0 }; // 2^10 = 1024
+        let result = value.log2::<CALC_SCALE,SCALE_OUT>(e);
+        assert!(result.is_ok());
+        let result_value = result.unwrap();
+        return *result_value.value()
+
+    }
+
+    pub fn test_log_10_i128(e: &Env)  {
+        // Input: 1000
+        let input_num = SoroNum { value: 1000, scale: 0 };
+        let result = input_num.log10::<18, 1>(e);
+        let expected_value = 30;
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().value, expected_value);
+    }
     // pub fn simple_u32_add(a: u32, b: u32) -> u32 {
     //     let x = SoroNum::new(a);
     //     let y = SoroNum::new(b);
@@ -40,11 +60,6 @@ impl SorobanMathExample {
     //     *m.value()
     // }
 
-    // pub fn log_2_i128(a: i128) -> u32 {
-    //     let num = SoroNum { value: a };
-    //     num.log2().unwrap()
-   
-    // }
 
     // pub fn root(e: Env, a: U256) -> U256 {
     //     let num1 = SoroNum { value: a };

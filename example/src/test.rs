@@ -12,6 +12,9 @@ fn test() {
     let sum_u32 = client.test_i128_add();
     assert_eq!(sum_u32, 2469126700);
     let _ = client.test_i128_pow();
+    let val = client.test_log_2_i128();
+    assert_eq!(val, 10);
+    let _ = client.test_log_10_i128();
 
     // let pow_u128_u32 = client.pow_u128_base_u32_exponent(&5_u128, &2_u32);
     // assert_eq!(pow_u128_u32, 25_u128);

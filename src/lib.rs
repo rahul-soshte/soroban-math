@@ -1,4 +1,5 @@
 //! Core Math Functions
+#![allow(unexpected_cfgs)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
 use crate::error::ArithmeticError;
