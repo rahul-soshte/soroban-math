@@ -1,7 +1,7 @@
 #![no_std]
 use soroban_math::{log::Logarithm, pow::Power, CoreArith, SoroNum};
 use soroban_sdk::{contract, contractimpl, Env};
-
+use soroban_math::root::Root;
 #[contract]
 pub struct SorobanMathExample;
 
@@ -41,6 +41,9 @@ impl SorobanMathExample {
         assert!(result.is_ok());
         assert_eq!(result.unwrap().value, expected_value);
     }
+
+
+    // pub fn test_r
     // pub fn simple_u32_add(a: u32, b: u32) -> u32 {
     //     let x = SoroNum::new(a);
     //     let y = SoroNum::new(b);
@@ -61,10 +64,12 @@ impl SorobanMathExample {
     // }
 
 
-    // pub fn root(e: Env, a: U256) -> U256 {
-    //     let num1 = SoroNum { value: a };
-    //     num1.sqrt(&e).value().clone()
-    // }
+    pub fn test_root(e: &Env) -> i128 {
+        let number = SoroNum::new(50000000, 6); // sqrt(100) should be 10.0
+        let result = number.sqrt::<12, 6>(e).unwrap();
+        // assert_eq!(result.value, 10000000);
+        return *result.value();
+    }
 
     // pub fn log_2_u256(a: U256) -> u32 {
     //     let num = SoroNum { value: a };

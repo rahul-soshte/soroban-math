@@ -1,69 +1,59 @@
-use soroban_sdk::{U256, Env, I256};
+use soroban_sdk::{ Env, I256};
+use crate::{error::ArithmeticError, SoroNum};
 
-use crate::{SoroNum, CoreArith};
 
-pub trait Sqrt {
-    fn sqrt(&self, e: &Env) -> Self;
+pub trait Root {
+    fn sqrt<const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        env: &Env
+    ) -> Result<Self, ArithmeticError> where Self: Sized;
 }
 
-impl Sqrt for SoroNum<U256> {
-    fn sqrt(&self, e: &Env) -> SoroNum<U256> {
-        let mut low = SoroNum { value: U256::from_u32(e, 0)};
-        let mut high = self.clone();
-        let two = SoroNum { value: U256::from_u32(e, 2)};
+impl Root for SoroNum<i128> {
+    fn sqrt<const CALC_SCALE: u32, const SCALE_OUT: u32>(
+        &self,
+        env: &Env
+    ) -> Result<Self, ArithmeticError> {
+        if self.value < 0 {
+            return Err(ArithmeticError::DomainError); // Square root of a negative number is not defined
+        }
+        if self.value == 0 {
+            return Ok(SoroNum::new(0, SCALE_OUT)); // Square root of 0 is 0
+        }
 
-        while low.clone().value < high.clone().value {
-            let mid = low.clone().add(high.clone()).unwrap().div(two.clone(), e).unwrap(); // Calculate the midpoint
-            let mid_squared = mid.clone().mul(mid.clone()).unwrap();
+        let two = I256::from_i128(env, 2);
+        let ten_pow_calc_scale = I256::from_i128(env, 10).pow(CALC_SCALE - SCALE_OUT);
+        let ten_pow_2_calc_scale = I256::from_i128(env, 10).pow((CALC_SCALE - SCALE_OUT) * 2);
+        
+        // Initial guess for Newton's method
+        let mut x = I256::from_i128(env, self.value)
+            .mul(&ten_pow_calc_scale)
+            .div(&two);
 
-            if *mid_squared.value() == *self.value() {
-                return mid; // Found exact square root
-            } else if *mid_squared.value() <  *self.value() {
-                low = mid.add(SoroNum {value: U256::from_u32(e, 1) }).unwrap();
-            } else {
-                high = mid;
+        // Newton's iteration
+        for _ in 0..30 { // Limit to a reasonable number of iterations
+            let x_old = x.clone();
+            let temp = I256::from_i128(env, self.value)
+                .mul(&ten_pow_2_calc_scale)
+                .div(&x);
+            x = x.add(&temp).div(&two);
+
+            if x == x_old { // Convergence check
+                break;
             }
         }
 
-        if *low.clone().mul(low.clone()).unwrap().value() > *self.value() {
-            low = low.sub(SoroNum { value: U256::from_u32(e, 1) }).unwrap();
-        }
+        // Calculate the scale factor for the final result
+        let scale_factor = I256::from_i128(env, 10).pow((CALC_SCALE - SCALE_OUT)/2);
+        let scaled_result = x.div(&scale_factor);
 
-        low
-    }
-}
-
-impl Sqrt for SoroNum<I256> {
-
-fn sqrt(&self, e: &Env) -> SoroNum<I256> {
-    
-    if self.value.to_i128().map_or(false, |x| x < 0) {
-        return SoroNum {value: I256::from_i32(e, 0)};
-    }
-
-    let mut low = SoroNum { value: I256::from_i32(e, 0) };
-    let mut high = self.clone();
-    let two = SoroNum { value: I256::from_i32(e, 2) };
-
-    while low.clone().value() < high.clone().value() {
-        let mid = low.clone().add(high.clone()).unwrap().div(two.clone(), e).unwrap(); // Calculate the midpoint
-        let mid_squared = mid.clone().mul(mid.clone()).unwrap();
-
-        if *mid_squared.value() == *self.value() {
-            return mid; // Found exact square root
-        } else if  *mid_squared.value() < *self.value(){
-            low = mid.add(SoroNum {value: I256::from_i32(e, 1)}).unwrap();
+        // Check for overflow and return the result
+        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Err(ArithmeticError::Overflow)
         } else {
-            high = mid;
+            Ok(SoroNum { value: scaled_result.to_i128().unwrap(), scale: SCALE_OUT })
         }
     }
-
-    // Adjust result if it's too high
-    if *low.clone().mul(low.clone()).unwrap().value() > *self.value() {
-        low = low.clone().sub(SoroNum {value: I256::from_i32(e, 1)}).unwrap();
-    }
-
-    low
 }
 
-}
+

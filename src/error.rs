@@ -3,5 +3,6 @@ pub enum ArithmeticError {
     Overflow,
     Underflow,
     DivisionByZero,
-    InvalidInput
+    InvalidInput,
+    DomainError
 }
