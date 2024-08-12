@@ -1,7 +1,7 @@
 #![cfg(test)]
 
 use super::*;
-use soroban_sdk::{Env, I256};
+use soroban_sdk::{Env};
 
 #[test]
 fn test() {
