@@ -4,5 +4,5 @@ pub enum ArithmeticError {
     Underflow,
     DivisionByZero,
     InvalidInput,
-    DomainError
+    DomainError,
 }

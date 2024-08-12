@@ -5,8 +5,8 @@
 use crate::error::ArithmeticError;
 use soroban_sdk::{Env, I256};
 pub mod error;
-pub mod pow;
 pub mod log;
+pub mod pow;
 pub mod root;
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -14,7 +14,6 @@ pub struct SoroNum<T> {
     pub value: T,
     pub scale: u32,
 }
-
 
 impl<T> SoroNum<T> {
     pub fn new(value: T, scale: u32) -> Self {
@@ -65,25 +64,36 @@ pub trait CoreArith {
 }
 
 impl CoreArith for SoroNum<i128> {
-
     fn add<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
         env: &Env,
         return_i256: bool,
     ) -> Result<SoroResult, ArithmeticError> {
-        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
-        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
-        
+        let self_scaled = I256::from_i128(env, self.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
+        let other_scaled = I256::from_i128(env, other.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
+
         let result = self_scaled.add(&other_scaled);
-        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+        let scaled_result = result
+            .mul(&I256::from_i128(env, 10).pow(SCALE_OUT))
+            .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
         if return_i256 {
-            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
-        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Ok(SoroResult::I256(SoroNum {
+                value: scaled_result,
+                scale: SCALE_OUT,
+            }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX)
+            || scaled_result < I256::from_i128(env, i128::MIN)
+        {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
+            Ok(SoroResult::I128(SoroNum {
+                value: I256::to_i128(&scaled_result).unwrap().into(),
+                scale: SCALE_OUT,
+            }))
         }
     }
 
@@ -93,18 +103,30 @@ impl CoreArith for SoroNum<i128> {
         env: &Env,
         return_i256: bool,
     ) -> Result<SoroResult, ArithmeticError> {
-        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
-        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
-        
+        let self_scaled = I256::from_i128(env, self.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
+        let other_scaled = I256::from_i128(env, other.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
+
         let result = self_scaled.sub(&other_scaled);
-        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+        let scaled_result = result
+            .mul(&I256::from_i128(env, 10).pow(SCALE_OUT))
+            .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
         if return_i256 {
-            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
-        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Ok(SoroResult::I256(SoroNum {
+                value: scaled_result,
+                scale: SCALE_OUT,
+            }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX)
+            || scaled_result < I256::from_i128(env, i128::MIN)
+        {
             Err(ArithmeticError::Underflow)
         } else {
-            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
+            Ok(SoroResult::I128(SoroNum {
+                value: I256::to_i128(&scaled_result).unwrap().into(),
+                scale: SCALE_OUT,
+            }))
         }
     }
 
@@ -114,20 +136,33 @@ impl CoreArith for SoroNum<i128> {
         env: &Env,
         return_i256: bool,
     ) -> Result<SoroResult, ArithmeticError> {
-        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
-        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
-        
-        let result = self_scaled.mul(&other_scaled)
+        let self_scaled = I256::from_i128(env, self.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
+        let other_scaled = I256::from_i128(env, other.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
+
+        let result = self_scaled
+            .mul(&other_scaled)
             .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+        let scaled_result = result
+            .mul(&I256::from_i128(env, 10).pow(SCALE_OUT))
+            .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
         if return_i256 {
-            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
-        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Ok(SoroResult::I256(SoroNum {
+                value: scaled_result,
+                scale: SCALE_OUT,
+            }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX)
+            || scaled_result < I256::from_i128(env, i128::MIN)
+        {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
+            Ok(SoroResult::I128(SoroNum {
+                value: I256::to_i128(&scaled_result).unwrap().into(),
+                scale: SCALE_OUT,
+            }))
         }
     }
 
@@ -141,19 +176,31 @@ impl CoreArith for SoroNum<i128> {
             return Err(ArithmeticError::DivisionByZero);
         }
 
-        let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE * 2 - self.scale));
-        let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
-        
+        let self_scaled = I256::from_i128(env, self.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE * 2 - self.scale));
+        let other_scaled = I256::from_i128(env, other.value)
+            .mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
+
         let result = self_scaled.div(&other_scaled);
 
-        let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
+        let scaled_result = result
+            .mul(&I256::from_i128(env, 10).pow(SCALE_OUT))
+            .div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
         if return_i256 {
-            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
-        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+            Ok(SoroResult::I256(SoroNum {
+                value: scaled_result,
+                scale: SCALE_OUT,
+            }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX)
+            || scaled_result < I256::from_i128(env, i128::MIN)
+        {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
+            Ok(SoroResult::I128(SoroNum {
+                value: I256::to_i128(&scaled_result).unwrap().into(),
+                scale: SCALE_OUT,
+            }))
         }
     }
 }
