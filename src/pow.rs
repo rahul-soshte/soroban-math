@@ -1,5 +1,7 @@
-use soroban_sdk::Env;
-use crate::{error::ArithmeticError, SoroNum, CoreArith};
+use core::panic;
+
+use soroban_sdk::{panic_with_error, Env};
+use crate::{error::ArithmeticError, CoreArith, SoroNum, SoroResult};
 
 
 pub trait Power {
@@ -23,11 +25,26 @@ impl Power for SoroNum<i128> {
 
         while exp > 0 {
             if exp % 2 == 1 {
-                result = result.mul::<CALC_SCALE, SCALE_OUT>(&base, env)?;
+                let temp = result.mul::<CALC_SCALE, SCALE_OUT>(&base, env, false)?;
+                result = match temp {
+                    SoroResult::I128(soronum) => {
+                        soronum
+                    }
+                    _ => panic!("Invalid type")
+                }
+                                
             }
             exp >>= 1;
             if exp > 0 {
-                base = base.mul::<CALC_SCALE, SCALE_OUT>(&base, env)?;
+                
+                let temp = base.mul::<CALC_SCALE, SCALE_OUT>(&base, env, false)?;
+                base = match temp {
+                    SoroResult::I128(soronum) => {
+                        soronum
+                    }
+                    _ => panic!("Invalid type")
+                }
+            
             }
         }
 

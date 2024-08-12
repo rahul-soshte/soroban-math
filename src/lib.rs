@@ -7,8 +7,8 @@ use soroban_sdk::{Env, I256};
 pub mod error;
 pub mod pow;
 pub mod log;
-// pub mod trig;
 pub mod root;
+pub mod trig;
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SoroNum<T> {
@@ -31,76 +31,90 @@ impl<T> SoroNum<T> {
     }
 }
 
+pub enum SoroResult {
+    I256(SoroNum<I256>),
+    I128(SoroNum<i128>),
+}
 pub trait CoreArith {
     fn add<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        e: &Env
-    ) -> Result<Self, ArithmeticError> where Self: Sized;
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError>;
 
     fn sub<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        e: &Env
-    ) -> Result<Self, ArithmeticError> where Self: Sized;
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError>;
 
     fn mul<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        e: &Env
-    ) -> Result<Self, ArithmeticError> where Self: Sized;
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError>;
 
     fn div<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        e: &Env
-    ) -> Result<Self, ArithmeticError> where Self: Sized;
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError>;
 }
-
 
 impl CoreArith for SoroNum<i128> {
 
     fn add<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        env: &Env
-    ) -> Result<Self, ArithmeticError> {
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError> {
         let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
         let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
         
         let result = self_scaled.add(&other_scaled);
         let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+        if return_i256 {
+            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroNum { value: scaled_result.to_i128().unwrap(), scale: SCALE_OUT })
+            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
         }
     }
 
     fn sub<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        env: &Env
-    ) -> Result<Self, ArithmeticError> {
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError> {
         let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
         let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
         
         let result = self_scaled.sub(&other_scaled);
         let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+        if return_i256 {
+            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Underflow)
         } else {
-            Ok(SoroNum { value: scaled_result.to_i128().unwrap(), scale: SCALE_OUT })
+            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
         }
     }
 
     fn mul<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        env: &Env
-    ) -> Result<Self, ArithmeticError> {
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError> {
         let self_scaled = I256::from_i128(env, self.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - self.scale));
         let other_scaled = I256::from_i128(env, other.value).mul(&I256::from_i128(env, 10).pow(CALC_SCALE - other.scale));
         
@@ -109,18 +123,21 @@ impl CoreArith for SoroNum<i128> {
 
         let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+        if return_i256 {
+            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroNum { value: scaled_result.to_i128().unwrap(), scale: SCALE_OUT })
+            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
         }
     }
 
     fn div<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
         other: &Self,
-        env: &Env
-    ) -> Result<Self, ArithmeticError> {
+        env: &Env,
+        return_i256: bool,
+    ) -> Result<SoroResult, ArithmeticError> {
         if other.value == 0 {
             return Err(ArithmeticError::DivisionByZero);
         }
@@ -132,10 +149,12 @@ impl CoreArith for SoroNum<i128> {
 
         let scaled_result = result.mul(&I256::from_i128(env, 10).pow(SCALE_OUT)).div(&I256::from_i128(env, 10).pow(CALC_SCALE));
 
-        if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
+        if return_i256 {
+            Ok(SoroResult::I256(SoroNum { value: scaled_result, scale: SCALE_OUT }))
+        } else if scaled_result > I256::from_i128(env, i128::MAX) || scaled_result < I256::from_i128(env, i128::MIN) {
             Err(ArithmeticError::Overflow)
         } else {
-            Ok(SoroNum { value: scaled_result.to_i128().unwrap(), scale: SCALE_OUT })
+            Ok(SoroResult::I128(SoroNum { value: I256::to_i128(&scaled_result).unwrap().into(), scale: SCALE_OUT }))
         }
     }
 }

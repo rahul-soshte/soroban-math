@@ -4,6 +4,12 @@
 use super::*;
 use soroban_sdk::Env;
 
+fn assert_close(a: i128, b: i128) {
+    const EPSILON: i128 = 1_000_000;
+    assert!((a - b).abs() < EPSILON, 
+            "Expected close to {:?}, but got {:?}", b, a);
+}
+
 #[test]
 fn test() {
     let env = Env::default();
@@ -17,4 +23,7 @@ fn test() {
     let _ = client.test_log_10_i128();
     let x = client.test_root();
     assert_eq!(x, 7071067);
+    // let m = client.test_sin_i128();
+    // assert_eq!(m, 7071067);
+
 }

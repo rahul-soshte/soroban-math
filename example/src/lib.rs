@@ -1,7 +1,10 @@
 #![no_std]
+use soroban_math::SoroResult;
 use soroban_math::{log::Logarithm, pow::Power, CoreArith, SoroNum};
 use soroban_sdk::{contract, contractimpl, Env};
 use soroban_math::root::Root;
+use soroban_math::trig::Trigonometry;
+
 #[contract]
 pub struct SorobanMathExample;
 
@@ -11,8 +14,16 @@ impl SorobanMathExample {
     pub fn test_i128_add(e: &Env) -> i128 {
         let a = SoroNum::<i128>::new(1_234_567, 6);  // 1.234567
         let b = SoroNum::<i128>::new(23_4567, 4);    // 23.4567
-        let m: SoroNum<i128> = a.add::<20, 8>(&b, e).unwrap();
-        *m.value()
+        
+        let m = a.add::<20, 8>(&b, e, false).unwrap();
+        let val =  match m  {
+            SoroResult::I128(soronum) => {
+                soronum
+            }
+            _ => panic!("Invalid type")
+        };
+
+        *val.value()
     }
 
     pub fn test_i128_pow(e: &Env) {
@@ -43,7 +54,7 @@ impl SorobanMathExample {
     }
 
 
-    // pub fn test_r
+    
     // pub fn simple_u32_add(a: u32, b: u32) -> u32 {
     //     let x = SoroNum::new(a);
     //     let y = SoroNum::new(b);
@@ -97,4 +108,7 @@ impl SorobanMathExample {
     // }
     
 }
+
+
+
 mod test;
