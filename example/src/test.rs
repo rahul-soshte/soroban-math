@@ -23,7 +23,5 @@ fn test() {
     let _ = client.test_log_10_i128();
     let x = client.test_root();
     assert_eq!(x, 7071067);
-    // let m = client.test_sin_i128();
-    // assert_eq!(m, 7071067);
 
 }
