@@ -1,6 +1,6 @@
 use core::panic;
 
-use soroban_sdk::{panic_with_error, Env};
+use soroban_sdk::Env;
 use crate::{error::ArithmeticError, CoreArith, SoroNum, SoroResult};
 
 
