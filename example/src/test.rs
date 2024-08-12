@@ -1,7 +1,7 @@
 #![cfg(test)]
 
 use super::*;
-use soroban_sdk::Env;
+use soroban_sdk::{Env, I256};
 
 #[test]
 fn test() {
@@ -16,4 +16,6 @@ fn test() {
     let _ = client.test_log_10_i128();
     let x = client.test_root();
     assert_eq!(x, 7071067);
+    let xss = client.test_div();
+    assert_eq!(xss, 25_i128);
 }

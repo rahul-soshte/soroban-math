@@ -59,6 +59,20 @@ impl SorobanMathExample {
         // assert_eq!(result.value, 10000000);
         return *result.value();
     }
+
+
+    pub fn test_div(e: &Env) -> i128 {
+        let number1 = SoroNum::new(50, 0); 
+        let number2 = SoroNum::new(2, 0); 
+
+        let result = number1.div::<10, 0>(&number2, e, false).unwrap();
+        let val = match result {
+            SoroResult::I128(soronum) => soronum,
+            _ => panic!("Invalid type"),
+        };
+       
+        return *val.value();
+    }
 }
 
 mod test;
