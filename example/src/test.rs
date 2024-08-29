@@ -18,4 +18,6 @@ fn test() {
     assert_eq!(x, 7071067);
     let xss = client.test_div();
     assert_eq!(xss, 25_i128);
+    let _cc = client.test_div_i256();
+
 }

@@ -3,6 +3,7 @@ use soroban_math::root::Root;
 use soroban_math::SoroResult;
 use soroban_math::{log::Logarithm, pow::Power, CoreArith, SoroNum};
 use soroban_sdk::{contract, contractimpl, Env};
+use soroban_sdk::I256;
 
 #[contract]
 pub struct SorobanMathExample;
@@ -72,6 +73,21 @@ impl SorobanMathExample {
         };
        
         return *val.value();
+    }
+
+    pub fn test_div_i256(e: &Env) {
+        let number1 = SoroNum::new(I256::from_i32(e, 100), 0); 
+        let number2 = SoroNum::new(I256::from_i32(e, 2), 0); 
+
+        let result = number1.div::<10, 0>(&number2, e, true).unwrap();
+        let val = match result {
+            SoroResult::I256(soronum) => soronum,
+            _ => panic!("Invalid type"),
+        };
+       
+        assert_eq!(*val.value(), I256::from_i32(e, 50_i32));
+        //TODO: Need to able to return custom type I think, as I256 should also be able to returned
+        // return *val.value();
     }
 }
 
