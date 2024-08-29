@@ -16,7 +16,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-soroban-math = "0.2.5"
+soroban-math = "0.2.6"
 ```
 
 And this to your code:
@@ -26,11 +26,14 @@ use soroban_math::*;
 ```
 
 ## Features
-1. High-Precision Arithmetic: Perform calculations with numbers using the i128 type, ensuring precision and accuracy.
+1. High-Precision Arithmetic: Perform calculations with numbers using the i128/I256 type, ensuring precision and accuracy.
 2. Advanced Math Functions: Access advanced mathematical functions like logarithms, exponentiation, and more.
 3. Ergonomic API: An intuitive API for easy integration into Soroban smart contracts.
 4. Minimized Rounding Losses: Specialized techniques to reduce rounding errors during calculations.
-5. Security: Audit-ready code to ensure the safety and correctness of calculations.
+
+## Some Notes
+
+I am monitoring and maintaining this repo closely. Writing test cases. I cannot ask you to assume that the library is 100% safe to use in all scenarios. If you need my consultation while integrating this library and implementing it as safely as possible in your project / hands-on custom implementation, I sure can do it, of course that will be come with some price tag, please DM me on [Twitter](https://twitter.com/RahulSoshte) or mail me here, rahul.soshte47@gmail.com.
 
 ## Use Cases
 
