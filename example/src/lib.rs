@@ -26,7 +26,13 @@ impl SorobanMathExample {
     pub fn test_i128_pow(e: &Env) {
         let base = SoroNum::new(2_i128, 0); // scale 0 for integers
         let result = base.pow::<10, 0>(3, &e).unwrap();
-        assert_eq!(result.value, 8);
+        assert_eq!(result.value,8 );
+    }
+
+    pub fn test_i256_pow(e: &Env) {
+        let base = SoroNum::new(I256::from_i128(e, 2), 0); // scale 0 for integers
+        let result = base.pow::<10, 0>(3, &e).unwrap();
+        assert_eq!(result.value, I256::from_i128(e, 8));
     }
 
     pub fn test_log_2_i128(e: &Env) -> i128 {
