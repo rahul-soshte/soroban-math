@@ -84,18 +84,29 @@ impl Power for SoroNum<I256> {
 mod tests {
     
     mod soronum_i128_pow_tests {
-
+        //TODO test 1: Small Base, Small Exponent, Preciseness for 3-4 inputs
+        //TODO test 2: Small Base, Large Exponent, Precisenses for 3-4 inputs
+        //TODO test 3: Small/Large Base, 0 Exponent, Precisenses for 3-4 inputs
+        //TODO test 4: Large Base, Small Exponent, Precisenses for 3-4 inputs
+        //TODO test 5: Large Base, Large Exponent, Precisenses for 3-4 inputs
+        //TODO test 6: Overflow Handling, Large output exceeds even I256
         #[test]
         fn test_pow_positive_exponent() {
-            todo!();
+           
         }
     }
 
     mod soronum_i256_pow_tests {
 
+        //TODO test 1: Small Base, Small Exponent, Preciseness for 3-4 inputs
+        //TODO test 2: Small Base, Large Exponent, Precisenses for 3-4 inputs
+        //TODO test 3: Small/Large Base, 0 Exponent, Precisenses for 3-4 inputs
+        //TODO test 4: Large Base, Small Exponent, Precisenses for 3-4 inputs
+        //TODO test 5: Large Base, Large Exponent, Precisenses for 3-4 inputs
+        //TODO test 6: Overflow Handling, Large output exceeds even I256
         #[test]
         fn test_pow_positive_exponent() {
-            todo!();
+            
         }
     }
 }
