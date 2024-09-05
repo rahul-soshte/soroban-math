@@ -82,26 +82,20 @@ impl Power for SoroNum<I256> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     
-
-    fn create_env() -> Env {
-        Env::default()
-    }
-
-    mod soronum_i128_tests {
+    mod soronum_i128_pow_tests {
 
         #[test]
         fn test_pow_positive_exponent() {
-            unimplemented!();
+            todo!();
         }
     }
 
-    mod soronum_i256_tests {
+    mod soronum_i256_pow_tests {
 
         #[test]
         fn test_pow_positive_exponent() {
-            unimplemented!();
+            todo!();
         }
     }
 }
