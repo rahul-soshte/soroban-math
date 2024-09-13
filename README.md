@@ -37,7 +37,7 @@ I am monitoring and maintaining this repo closely. Writing test cases. I cannot 
 
 ## Getting Help
 
-Join the [soroban-math discord](https://discord.gg/Dy7BXxUJHC) to chat with the community!
+Join the [discord server](https://discord.gg/Dy7BXxUJHC) to chat with the community!
 
 ## Use Cases
 
