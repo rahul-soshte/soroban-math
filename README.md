@@ -35,6 +35,10 @@ use soroban_math::*;
 
 I am monitoring and maintaining this repo closely. Writing test cases. I cannot ask you to assume that the library is 100% safe to use in all scenarios. If you need my consultation while integrating this library and implementing it as safely as possible in your project / hands-on custom implementation, I sure can do it, of course that will be come with some price tag, please DM me on [Twitter](https://twitter.com/RahulSoshte) or mail me here, rahul.soshte47@gmail.com.
 
+## Getting Help
+
+Join the [soroban-math discord](https://discord.gg/Dy7BXxUJHC) to chat with the community!
+
 ## Use Cases
 
 Soroban-Math is essential for any Soroban-based project that requires high-precision mathematical calculations, for example:
