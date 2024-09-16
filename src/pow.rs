@@ -14,6 +14,8 @@ pub trait Power {
         Self: Sized;
 }
 
+//? Fractional Exponent, when
+
 impl Power for SoroNum<i128> {
     fn pow<const CALC_SCALE: u32, const SCALE_OUT: u32>(
         &self,
@@ -108,10 +110,10 @@ mod tests {
         use soroban_sdk::Env;
         use crate::{pow::Power, SoroNum};
         
+        // test 1: Small Base, Small Exponent, Preciseness for 1-2 inputs
         #[test]
         fn test_pow_small_base_small_exponent() {
             let env = Env::default();
-            //TODO test 1: Small Base, Small Exponent, Preciseness for 3-4 inputs
 
             // Case 1: When exponent is 1, it should return the same number
             let a = SoroNum::<i128>::new(1_234_567, 6); // 1.234567
@@ -126,8 +128,28 @@ mod tests {
             assert_eq!(pow_b.scale(), 7);
 
         }
-        //TODO test 2: Small Base, Large Exponent, Precisenses for 3-4 inputs
-        //TODO test 3: Small/Large Base, 0 Exponent, Precisenses for 3-4 inputs
+        //TODO test 2: Small Base, Large Exponent, Scale is small, Precisenses for 1-2 inputs
+        #[test]
+        fn test_pow_small_base_large_exponent() {
+            let env = Env::default();
+            // test 1: Small Base, Small Exponent, Preciseness for 1-2 inputs
+
+            // Case 1: When exponent is 25, and the base is 7.16 
+            let a = SoroNum::<i128>::new(716, 2); // 7.16
+            let pow_a = a.pow::<10, 6>(25, &env).unwrap();
+            assert_eq!(*pow_a.value(), 2359530294415687448714390274); //TODO:  Actual value around, 2,359,530,294,415,688,700,000 
+            assert_eq!(pow_a.scale(), 6);
+
+            // Case 2: When exponent is 50, but and the base is 12.25
+            //? Overflow happening, why will it overflow
+            let b = SoroNum::<i128>::new(1225, 2); // 12.25
+            let pow_b = b.pow::<10, 4>(50, &env).unwrap();
+            assert_eq!(*pow_b.value(), 1_524_1556);
+            assert_eq!(pow_b.scale(), 7);
+
+        }
+
+        //TODO test 3: Small/Large Base, 0 Exponent, Precisenses for 1-2 inputs
         #[test]
         fn test_pow_small_base_zero_exponent() {
             let env = Env::default();
