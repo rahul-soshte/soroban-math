@@ -155,7 +155,7 @@ mod tests {
             // Case 2: When exponent is 50, but and the base is 12.25
             // Overflow happens when the i128 is used for intermediate calculations, and then this case will fail
             // TODO: Intermediate Calculation should switch between I256 and i128 so that it doesn't affect fees
-            // TODO: Not entirely how much cpu instructions get used more when we use I156 or i128, need to benchmark
+            // TODO: Not entirely sure how much cpu instructions get used more when we use I156 or i128, need to benchmark
             let b = SoroNum::<i128>::new(1225, 2); // 12.25
             let pow_b = b.pow::<10, 4>(50, &env).unwrap();
             assert_eq!(pow_b.value(), &I256::from_i128(&env, 245000)); // If you run cargo test, the test fails and shows the The LHS is I256(obj#163)
