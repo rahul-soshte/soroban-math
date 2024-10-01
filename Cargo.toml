@@ -13,4 +13,4 @@ authors = ["Rahul Soshte <rahul.soshte47@gmail.com>"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-soroban-sdk = "21.6.0"
+soroban-sdk = "21.7.3"
