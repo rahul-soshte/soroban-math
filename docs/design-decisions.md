@@ -27,3 +27,6 @@ If two numbers are of different scales, the intermediate calculation must be don
 
 ??
 
+## Types of Errors Define
+
+??
