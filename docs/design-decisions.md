@@ -21,3 +21,9 @@ let x = SoroNum::new(123_i128, 2); // Symbolic representation of 1.23
 ## CALC_SCALE and OUT_SCALE generic
 
 If two numbers are of different scales, the intermediate calculation must be done in much higher scale and we need to operate on them. And the OUT_SCALE is expected scale of the output.
+
+
+## Flooring and Ceiling
+
+??
+
