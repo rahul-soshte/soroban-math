@@ -30,3 +30,8 @@ If two numbers are of different scales, the intermediate calculation must be don
 ## Types of Errors Define
 
 ??
+
+
+## Downcast and Upcasting (for eg, u256 to u512)
+
+??
