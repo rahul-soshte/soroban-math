@@ -25,13 +25,22 @@ If two numbers are of different scales, the intermediate calculation must be don
 
 ## Flooring and Ceiling
 
-??
+TODO: ??
 
 ## Types of Errors Define
 
-??
+1. Overflow
+2. Underflow
 
 
 ## Downcast and Upcasting (for eg, u256 to u512)
 
-??
+Need to conversion for each type, even if it is available inside rust core, or the soroban-sdk.
+
+## Not Ignoring Remainder or Truncation
+
+If there is any truncation happening in a division, it would be good practice to return the truncated part as well, even if it might be not useful. 
+
+## Switchable Algorithm
+
+Multiple algorithms can be used for the same arithmetic operation. Considering that to improve usability, it can be a feature to be able to switch between the algorithms.
