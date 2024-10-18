@@ -1,0 +1,1 @@
+# TODO: Add Ranges for each possible type

@@ -8,6 +8,7 @@ pub mod error;
 pub mod log;
 pub mod pow;
 pub mod root;
+pub mod casting;
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct SoroNum<T> {
