@@ -16,7 +16,7 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-soroban-math = "0.2.7"
+soroban-math = "0.2.8"
 ```
 
 And this to your code:
