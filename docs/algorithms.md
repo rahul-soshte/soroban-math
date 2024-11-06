@@ -8,3 +8,6 @@ TODO: Explanation, why the algorithm is best.
 
 ## Root
 TODO: Explanation,  why the algorithm is best.
+
+## Quadratic (ax2 + bx + c)
+TODO: Explanation, why the algorithm is best

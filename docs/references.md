@@ -9,3 +9,7 @@
 5. "Numerical Recipes: The Art of Scientific Computing" by William H. Press et al
 6. "Digital Arithmetic" by Miloš D. Ercegovac and Tomás Lang
 
+## Specific References
+
+1. Knuth: The Art of Computer Programming, Vol II “Seminumerical Algorithms” Ch. 4.3 “Multi-Precision Arithmetic”
+2. Warren: Hacker's Delight, Ch. 8 and 9.
