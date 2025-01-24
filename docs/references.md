@@ -13,3 +13,9 @@
 
 1. Knuth: The Art of Computer Programming, Vol II “Seminumerical Algorithms” Ch. 4.3 “Multi-Precision Arithmetic”
 2. Warren: Hacker's Delight, Ch. 8 and 9.
+
+
+## Reference Repos
+
+1. https://docs.rs/fixed/latest/fixed/
+2. https://docs.rs/fpa/latest/fpa/

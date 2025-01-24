@@ -44,3 +44,8 @@ If there is any truncation happening in a division, it would be good practice to
 ## Switchable Algorithm
 
 Multiple algorithms can be used for the same arithmetic operation. Considering that to improve usability, it can be a feature to be able to switch between the algorithms.
+
+# Allocation of Fraction and Integer Bits
+
+For example, provide a functionality so that the developer for a n-bit number is able to allocate x bits for integer part, and n - x bits for fraction part.
+ref: https://docs.rs/fixed/latest/fixed/
