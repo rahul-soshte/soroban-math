@@ -49,3 +49,7 @@ Multiple algorithms can be used for the same arithmetic operation. Considering t
 
 For example, provide a functionality so that the developer for a n-bit number is able to allocate x bits for integer part, and n - x bits for fraction part.
 ref: https://docs.rs/fixed/latest/fixed/
+
+## Bitwise Operation or Simple Multiplication / Division
+
+Bitwise Operations to do arithmetic are better or the arithmetic operations provided by the rust primitives are better?
