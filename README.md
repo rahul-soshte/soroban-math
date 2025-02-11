@@ -7,7 +7,7 @@
 
 A high-precision fixed-point math library for Soroban smart contracts on the Stellar blockchain.
 
-**This project aims to empower Soroban developers with precise mathematical operations and advanced functions while minimizing precision loss. It is currently under development and subject to enhancements and optimizations.**
+**This project aims to empower Soroban developers with precise mathematical operations and advanced functions while minimizing precision loss. It is currently under development and not functional and subject to enhancements and optimizations.**
 
 
 ## Quickstart
