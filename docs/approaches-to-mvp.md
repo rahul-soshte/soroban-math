@@ -26,3 +26,8 @@ So lower precision is always bad. But the problem as well is that the i128 can h
 
 Why not seperate crate for each math function? So we don't make just one crate a cocktail for madness.
 
+
+# Approach 4
+
+Build custom macros that can be usable for any developer, and let him customize his types to be fit for his use case. Because most code is repeatable and we need to be just more smarter with our time.
+Also error adjustment is needed, precision error become bigger and bigger, as many operations are performed.(Need to check and prove this hypotheses)
